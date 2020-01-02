@@ -86,3 +86,7 @@ def read_elcentro(scale=1., total_time=40):
                 accel.extend([-scale * float(r) for r in row])
     time_vec = np.linspace(0., len(accel) * dt, len(accel)+1)
     return time_vec[:freq*total_time+1], np.array(accel)[:freq*total_time+1]
+
+s = 0.5
+mu = 0.5
+(np.exp(s**2) - 1) * np.exp(2*mu + s**2)
