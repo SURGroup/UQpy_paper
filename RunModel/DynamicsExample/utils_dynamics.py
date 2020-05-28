@@ -3,48 +3,58 @@
 import numpy as np
 
 
-# Part a: stochasticity arises from excitation ground motion
-
-def sdof_boucwen_SE(samples, time_vec):
-    """ Compute QoI (displacement time-series) for a sdof Bouc-Wen model, model parameters are fixed.
-    samples: samples - ndarray (N x d) - of the ground motion acceleration time-series [cm.s2]
-    time_vec: the sampling times of the excitation - ndarray (d, )
-    output is the displacement time-series [cm]
-    """
-    # Set a fixed parameter value - units are k[cN/cm], r0[cm], delta[], n[], c[cN.s/m]
-    params = np.array([1.0, 2., 0.9, 3., 2.])
-    # Simulate the behavior of the system forward in time using a fourth order Runge-Kutta method
-    ys = np.zeros((3, time_vec.size))
-    for i, tn in enumerate(time_vec[:-1]):
-        tnp1, ynp1 = one_step_RK4(fun_deriv=deriv_sdof_boucwen, dt=time_vec[i+1]-tn, tn=tn, yn=ys[:, i],
-                                  params=params, input_acceleration=samples, time_vec=time_vec)
-        ys[:, i+1] = ynp1
-    # Post-process the solver results: extract displacement time series
-    time_disp = ys[0, :]
-    return time_disp
-
-
-# Part b: stochasticity arises from system parameters
+# Part a: stochasticity arises solely from system parameters
 
 def sdof_boucwen_RP(samples, scale_factor=1., return_Rf=False):
-    """ Compute QoI (displacement time-series, and possibly restoring force) for a sdof Bouc-Wen model
+    """ 
+    Compute QoI (displacement time-series, and possibly restoring force) for a sdof Bouc-Wen model
+    
     samples are samples of the model parameters - the units should be k[N/m], r0[cm], delta[], n[], c[cN.s/m]
     scale_factor indicates the scale of the excitation,
     return_Rf indicates whether to return the restoring force along with the displacement time series as a QoI
     """
     # Read input acceleration from el-centro data set
     time_vec, input_acceleration = read_elcentro(scale=scale_factor)
+    # Read the parameter vector
+    params = samples.reshape((-1, ))
     # Simulate the behavior of the system forward in time
     ys = np.zeros((3, time_vec.size))
     for i, tn in enumerate(time_vec[:-1]):
         tnp1, ynp1 = one_step_RK4(fun_deriv=deriv_sdof_boucwen, dt=time_vec[i+1]-tn, tn=tn, yn=ys[:, i],
-                                  params=samples, input_acceleration=input_acceleration, time_vec=time_vec)
+                                  params=params, input_acceleration=input_acceleration, time_vec=time_vec)
         ys[:, i+1] = ynp1
     # Post-process the solver results: extract displacement and reaction force time series
     time_disp = ys[0, :]    # displacement time series
-    time_rf = samples[0] * ys[2, :]    # reaction force
+    time_rf = params[0] * ys[2, :]    # reaction force
     if return_Rf:
         return [time_disp, time_rf]
+    return time_disp
+
+
+# Part a: stochasticity arises from excitation ground motion
+
+def sdof_boucwen_2(samples, time_vec):
+    """ 
+    Compute QoI (displacement time-series) for a sdof Bouc-Wen model, both the model parameters and input excitation are random
+    
+    samples: samples: random field and random parameter vector
+    random field (ground motion acceleration time-series [cm.s2]) is ndarray of shape (nsamples, d_excitation)
+    random parameter vector is ndarray of shape (N, 5)
+    
+    time_vec: the sampling times of the excitation - ndarray (d, )
+    output is the displacement time-series [cm]
+    """
+    # Set a fixed parameter value - units are k[cN/cm], r0[cm], delta[], n[], c[cN.s/m]
+    params = samples[0]
+    input_acceleration = samples[1]
+    # Simulate the behavior of the system forward in time using a fourth order Runge-Kutta method
+    ys = np.zeros((3, time_vec.size))
+    for i, tn in enumerate(time_vec[:-1]):
+        tnp1, ynp1 = one_step_RK4(fun_deriv=deriv_sdof_boucwen, dt=time_vec[i+1]-tn, tn=tn, yn=ys[:, i],
+                                  params=params, input_acceleration=input_acceleration, time_vec=time_vec)
+        ys[:, i+1] = ynp1
+    # Post-process the solver results: extract displacement time series
+    time_disp = ys[0, :]
     return time_disp
 
 
