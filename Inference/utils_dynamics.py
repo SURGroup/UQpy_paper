@@ -13,25 +13,29 @@ def sdof_boucwen_RP(samples, scale_factor=1., return_Rf=False):
     """
     # Read input acceleration from el-centro data set
     time_vec, input_acceleration = read_elcentro(scale=scale_factor)
+    # Get the parameters
+    params = samples.reshape((-1,))
     # Simulate the behavior of the system forward in time
     ys = np.zeros((3, time_vec.size))
     for i, tn in enumerate(time_vec[:-1]):
         tnp1, ynp1 = one_step_RK4(fun_deriv=deriv_sdof_boucwen, dt=time_vec[i+1]-tn, tn=tn, yn=ys[:, i],
-                                  params=samples, input_acceleration=input_acceleration, time_vec=time_vec)
+                                  params=params, input_acceleration=input_acceleration, time_vec=time_vec)
         ys[:, i+1] = ynp1
     # Post-process the solver results: extract displacement and reaction force time series
     time_disp = ys[0, :]    # displacement time series
-    time_rf = samples[0] * ys[2, :]    # reaction force
+    time_rf = params[0] * ys[2, :]    # reaction force
     if return_Rf:
         return [time_disp, time_rf]
     return time_disp
 
 
-def sdof_elastoplastic_RP(params, scale_factor=1., return_Rf=False):
+def sdof_elastoplastic_RP(samples, scale_factor=1., return_Rf=False):
     """ Compute QoI (displacement) for an elastoplastic sdof system. The random variable is params=[k, x_n, c].
      RP stands for random parameters. """
     # Read input acceleration from el-centro data set
     time_vec, input_acceleration = read_elcentro(scale=scale_factor)
+    # Get the parameters
+    params = samples.reshape((-1,))
     # Simulate the behavior of the system forward using a Runge-Kutta fourth order solver
     ys, time_rf = np.zeros((2, time_vec.size)), np.zeros((time_vec.size, ))
     turn_pt = (0., 0.)
@@ -49,11 +53,13 @@ def sdof_elastoplastic_RP(params, scale_factor=1., return_Rf=False):
     return time_disp
 
 
-def sdof_linear_RP(params, scale_factor=1., return_Rf=False):
+def sdof_linear_RP(samples, scale_factor=1., return_Rf=False):
     """ Compute QoI (displacement) for a linear elastic sdof system. The random variable is params=[k, c].
      RP stands for random parameters. """
     # Read input acceleration from el-centro data set
     time_vec, input_acceleration = read_elcentro(scale=scale_factor)
+    # Get the parameters
+    params = samples.reshape((-1,))
     # Simulate the behavior of the system forward using a Runge-Kutta fourth order solver
     ys, time_rf = np.zeros((2, time_vec.size)), np.zeros((time_vec.size, ))
     for i, tn in enumerate(time_vec[:-1]):
