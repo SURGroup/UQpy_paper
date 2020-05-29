@@ -3,8 +3,7 @@
 import numpy as np
 
 
-# Part a: stochasticity arises solely from system parameters
-
+# Stochasticity arises solely from system parameters
 def sdof_boucwen_RP(samples, scale_factor=1., return_Rf=False):
     """ 
     Compute QoI (displacement time-series, and possibly restoring force) for a sdof Bouc-Wen model
@@ -31,8 +30,7 @@ def sdof_boucwen_RP(samples, scale_factor=1., return_Rf=False):
     return time_disp
 
 
-# Part a: stochasticity arises from excitation ground motion
-
+# Stochasticity arises from both model parameters and excitation ground motion
 def sdof_boucwen_2(samples, time_vec):
     """ 
     Compute QoI (displacement time-series) for a sdof Bouc-Wen model, both the model parameters and input excitation are random
