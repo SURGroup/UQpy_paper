@@ -124,6 +124,7 @@ def FireProblem():
     mdb.models['FireBenchmark'].HomogeneousShellSection(name='ShellSection',
                                                         preIntegrate=OFF, material='Steel', thicknessType=UNIFORM,
                                                         thickness=0.035, thicknessField='',
+                                                        idealization=NO_IDEALIZATION,
                                                         poissonDefinition=DEFAULT, thicknessModulus=None,
                                                         temperature=GRADIENT,
                                                         useDensity=OFF, integrationRule=SIMPSON, numIntPts=5)
@@ -205,16 +206,16 @@ def FireProblem():
                                          surface=region2, influenceRadius=WHOLE_SURFACE, couplingType=KINEMATIC,
                                          localCsys=None, u1=ON, u2=ON, u3=ON, ur1=ON, ur2=ON, ur3=ON)
 
-    # Create axial spring
-    a = mdb.models['FireBenchmark'].rootAssembly
-    region = a.sets['RP_RHS']
-    mdb.models['FireBenchmark'].rootAssembly.engineeringFeatures.SpringDashpotToGround(
-        name='AxialSpring', region=region, orientation=None, dof=1,
-        springBehavior=ON, springStiffness=0.190181250, dashpotBehavior=OFF,
-        dashpotCoefficient=0.0)
-    session.viewports['Viewport: 1'].assemblyDisplay.setValues(interactions=OFF,
-                                                               constraints=OFF, connectors=OFF, engineeringFeatures=OFF,
-                                                               adaptiveMeshConstraints=ON)
+    # # Create axial spring
+    # a = mdb.models['FireBenchmark'].rootAssembly
+    # region = a.sets['RP_RHS']
+    # mdb.models['FireBenchmark'].rootAssembly.engineeringFeatures.SpringDashpotToGround(
+    #     name='AxialSpring', region=region, orientation=None, dof=1,
+    #     springBehavior=ON, springStiffness=0.1901812500, dashpotBehavior=OFF,
+    #     dashpotCoefficient=0.0)
+    # session.viewports['Viewport: 1'].assemblyDisplay.setValues(interactions=OFF,
+    #                                                            constraints=OFF, connectors=OFF, engineeringFeatures=OFF,
+    #                                                            adaptiveMeshConstraints=ON)
 
     # Create steps
     mdb.models['FireBenchmark'].StaticStep(name='MechStep', previous='Initial',

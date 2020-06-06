@@ -4,7 +4,6 @@ from abaqus import *
 from abaqusConstants import *
 import __main__
 import os
-import numpy as np
 
 
 def ODBAnalysis():
@@ -31,21 +30,8 @@ def ODBAnalysis():
 
     outfilename = 'time_temp_disp_data.csv'
     outfile = open(outfilename, 'w')
-
-    # for i in range(len(disps)):
-    #     outfile.write('%10.6f, %10.6f, %10.6f \n' % (disps[i][0] - 1, temps[i][1], disps[i][1] - disps[0][1]))
-
-    # Compute the maximum allowable displacement
-    length_of_beam = 1  # in m
-    depth_of_beam = 0.035  # in m
-    max_allowable_disp = length_of_beam ** 2 / (400 * depth_of_beam)
-    disps_array = np.array(disps)
-
-    y_akmcs = -max(map(abs, (disps_array[:, 1] - disps_array[0, 1]))) + max_allowable_disp
-    # if disps_array[-1, 0] < 1:
-    #     y_akmcs = -np.random.uniform(0, 0.1)*max_allowable_disp
-
-    outfile.write('%10.6f \n' % y_akmcs)
+    for i in range(len(disps)):
+        outfile.write('%10.6f, %10.6f, %10.6f \n' % (disps[i][0] - 1, temps[i][1], disps[i][1] - disps[0][1]))
     outfile.close()
 
 
