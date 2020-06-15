@@ -5,7 +5,7 @@ import numpy as np
 
 # Define the three models (Bouc-Wen, elastoplastic, linear)
 
-def sdof_boucwen_RP(samples, scale_factor=1., return_Rf=False):
+def sdof_boucwen_infce(samples, scale_factor=1., return_Rf=False):
     """ Compute QoI (displacement time-series, and possibly restoring force) for a sdof Bouc-Wen model
     samples are samples of the model parameters - the units should be k[N/m], r0[cm], delta[], n[], c[cN.s/m]
     scale_factor indicates the scale of the excitation,
@@ -29,7 +29,7 @@ def sdof_boucwen_RP(samples, scale_factor=1., return_Rf=False):
     return time_disp
 
 
-def sdof_elastoplastic_RP(samples, scale_factor=1., return_Rf=False):
+def sdof_elastoplastic_infce(samples, scale_factor=1., return_Rf=False):
     """ Compute QoI (displacement) for an elastoplastic sdof system. The random variable is params=[k, x_n, c].
      RP stands for random parameters. """
     # Read input acceleration from el-centro data set
@@ -53,7 +53,7 @@ def sdof_elastoplastic_RP(samples, scale_factor=1., return_Rf=False):
     return time_disp
 
 
-def sdof_linear_RP(samples, scale_factor=1., return_Rf=False):
+def sdof_linear_infce(samples, scale_factor=1., return_Rf=False):
     """ Compute QoI (displacement) for a linear elastic sdof system. The random variable is params=[k, c].
      RP stands for random parameters. """
     # Read input acceleration from el-centro data set
