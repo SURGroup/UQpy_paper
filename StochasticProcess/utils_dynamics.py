@@ -5,20 +5,20 @@ import numpy as np
 
 # Stochasticity arises from both the excitation ground motion and model parameters
 
-def sdof_boucwen_2(samples, time_vec):
+def sdof_boucwen_prop(samples, time_vec):
     """ 
     Compute QoI (displacement time-series) for a sdof Bouc-Wen model, both the model parameters and input excitation are random
     
     samples: samples: random field and random parameter vector
     random field (ground motion acceleration time-series [cm.s2]) is ndarray of shape (nsamples, d_excitation)
-    random parameter vector is ndarray of shape (N, 4)
+    random parameter vector is ndarray of shape (N, 5)
     
     time_vec: the sampling times of the excitation - ndarray (d, )
     output is the displacement time-series [cm]
     """
     # Set a fixed parameter value - units are k[cN/cm], r0[cm], delta[], n[], c[cN.s/m]
-    params = samples[0]
-    input_acceleration = samples[1]
+    params = np.concatenate(samples[0, :4])
+    input_acceleration = samples[0, -1]
     # Simulate the behavior of the system forward in time using a fourth order Runge-Kutta method
     ys = np.zeros((3, time_vec.size))
     for i, tn in enumerate(time_vec[:-1]):
