@@ -9,9 +9,9 @@ def extract_disp_temp_output(index):
     command = "abaqus cae nogui=" + output_script_path
     try:
         out = os.system(command)
-        print('Out: ', out)
+        # print('Out: ', out)
         if out == 0:
-            print('Example: Successful output extraction.')
+            # print('Example: Successful output extraction.')
             outfilename = 'time_temp_disp_data.csv'
             data = np.genfromtxt(outfilename, delimiter=',')
 
