@@ -1,5 +1,7 @@
 # UQpy_paper
-Jupyter scripts accompanying the publication "UQpy:  A general purpose Python package and development environment for uncertainty quantification". 
+Jupyter scripts accompanying the publication: 
+
+Olivier, A., Giovanis, D.G., Aakash, B.S., Chauhan, M., Vandanapu, L., and Shields, M.D. (2020). "UQpy:  A general purpose Python package and development environment for uncertainty quantification". Journal of Computational Science.
 
 The notebooks contain all the pieces of code necessary to run the various examples presented in the manuscript. The project structure follows the structure of the paper, i.e., folders and sub-folders correspond to various sections of the manuscript. 
 
