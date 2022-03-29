@@ -1,4 +1,6 @@
 # UQpy_paper
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/SURGroup/UQpy_paper/master)
+
 Jupyter scripts accompanying the publication: 
 
 Olivier, A., Giovanis, D.G., Aakash, B.S., Chauhan, M., Vandanapu, L., and Shields, M.D. (2020). "UQpy:  A general purpose Python package and development environment for uncertainty quantification". Journal of Computational Science.
